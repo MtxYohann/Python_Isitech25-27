@@ -1,0 +1,32 @@
+{% extends 'library/base.html' %}
+{% block title %}Confirmer le Retour{% endblock %}
+{% block content %}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'library:book_list' %}">Livres</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'library:book_detail' pk=loan.book.pk %}">{{ loan.book.title }}</a>
+        </li>
+        <li class="breadcrumb-item active">Retour</li>
+    </ol>
+</nav>
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h1>Confirmer le Retour de "{{ loan.book.title }}"</h1>
+            </div>
+            <div class="card-body">
+                <p><strong>Emprunteur :</strong> {{ loan.borrower_full_name }}</p>
+                <p><strong>Date d'emprunt :</strong> {{ loan.borrow_date }}</p>
+                <p><strong>Échéance :</strong> {{ loan.due_date }}</p>
+                <p>Êtes-vous sûr de vouloir retourner ce livre ?</p>
+                <form method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-success">Confirmer le Retour</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<a href="{% url 'library:book_detail' pk=loan.book.pk %}" class="btn btn-secondary mt-3">Annuler</a>
+{% endblock %}

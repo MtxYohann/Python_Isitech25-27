@@ -1,0 +1,13 @@
+{% extends 'library/base.html' %}
+{% block title %}Contact{% endblock %}
+{% block content %}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item active">Contact</li>
+    </ol>
+</nav>
+<h1 class="mb-4">Contactez-Nous</h1>
+<p>Pour toute question, contactez l'administrateur à admin@bibliotheque.com.</p>
+<p>Adresse : 123 Rue des Livres, Ville, Pays.</p>
+<a href="{% url 'library:book_list' %}" class="btn btn-secondary">Retour à l'accueil</a>
+{% endblock %}

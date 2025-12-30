@@ -1,0 +1,15 @@
+{% extends 'library/base.html' %}
+{% block title %}À Propos{% endblock %}
+{% block content %}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item active">À Propos</li>
+    </ol>
+</nav>
+<h1 class="mb-4">À Propos de la Bibliothèque Numérique</h1>
+<p>Cette application permet de gérer une bibliothèque en ligne : consulter les livres, emprunter, retourner, et
+    rechercher facilement.</p>
+<p>Développée avec Django, elle offre une interface simple pour les utilisateurs et un admin puissant pour les
+    gestionnaires.</p>
+<a href="{% url 'library:book_list' %}" class="btn btn-secondary">Retour à l'accueil</a>
+{% endblock %}

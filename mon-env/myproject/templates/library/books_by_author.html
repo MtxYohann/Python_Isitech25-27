@@ -1,0 +1,44 @@
+{% extends 'library/base.html' %}
+{% load library_tags %}
+{% block title %}Livres de {{ author.first_name }} {{ author.last_name }}{% endblock %}
+{% block content %}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'library:author_list' %}">Auteurs</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'library:author_detail' pk=author.pk %}">{{ author.first_name }} {{
+                author.last_name }}</a></li>
+        <li class="breadcrumb-item active">Livres</li>
+    </ol>
+</nav>
+<h1 class="mb-4">Livres de {{ author.first_name }} {{ author.last_name }}</h1>
+<div class="row">
+    {% for book in page_obj %}
+    <div class="col-md-4 mb-3">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title"><a href="{% url 'library:book_detail' pk=book.pk %}">{{ book.title }}</a></h5>
+                <p class="card-text">ISBN: {{ book.isbn|format_isbn }}</p>
+                <p class="card-text">Stock disponible: {{ book.stock_dispo }}</p>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="alert alert-info">Aucun livre pour cet auteur.</div>
+    {% endfor %}
+</div>
+{% if page_obj.has_other_pages %}
+<nav>
+    <ul class="pagination justify-content-center">
+        {% if page_obj.has_previous %}
+        <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">Précédent</a></li>
+        {% endif %}
+        <li class="page-item active"><span class="page-link">{{ page_obj.number }}</span></li>
+        {% if page_obj.has_next %}
+        <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Suivant</a></li>
+        {% endif %}
+    </ul>
+</nav>
+{% endif %}
+<a href="{% url 'library:author_detail' pk=author.pk %}" class="btn btn-secondary me-2">Détails de l'auteur</a>
+<a href="{% url 'library:book_list' %}" class="btn btn-secondary">Retour à la liste des livres</a>
+{% endblock %}

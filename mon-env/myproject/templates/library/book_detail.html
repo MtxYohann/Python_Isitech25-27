@@ -1,15 +1,37 @@
-<h1>{{ book.title }}</h1>
-<p><strong>Auteur :</strong> {{ book.author }}</p>
-<p><strong>ISBN :</strong> {{ book.isbn }}</p>
-<p><strong>Année de publication :</strong> {{ book.publication_year }}</p>
-<p><strong>Catégorie :</strong> {{ book.category }}</p>
-<p><strong>Exemplaires disponibles :</strong> {{ book.stock_dispo }} / {{ book.stock_max }}</p>
-<p><strong>Description :</strong> {{ book.description }}</p>
-<p><strong>Langue :</strong> {{ book.language }}</p>
-<p><strong>Nombre de pages :</strong> {{ book.nb_pages }}</p>
-<p><strong>Édition :</strong> {{ book.edition }}</p>
-<p><strong>Image :</strong> <img src="{{ book.image_url }}" alt="{{ book.title }}" style="max-width: 200px;"></p>
-<p><strong>Date d'ajout au catalogue :</strong> {{ book.catalogued_date }}</p>
-
-<a href="{% url 'loan_create' book.pk %}">Emprunter ce livre</a>
-<a href="{% url 'book_list' %}">Retour à la liste</a>
+{% extends 'library/base.html' %}
+{% load library_tags %}
+{% block title %}{{ book.title }}{% endblock %}
+{% block content %}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'library:book_list' %}">Livres</a></li>
+        <li class="breadcrumb-item active">{{ book.title }}</li>
+    </ol>
+</nav>
+<div class="row">
+    <div class="col-md-4">
+        <img src="{{ book.image_url|default:'https://via.placeholder.com/300' }}" class="img-fluid rounded"
+            alt="Couverture de {{ book.title }}">
+    </div>
+    <div class="col-md-8">
+        <h1>{{ book.title }}</h1>
+        <p><strong>Auteur :</strong> <a href="{% url 'library:author_detail' pk=book.author.pk %}">{{ book.author }}</a>
+        </p>
+        <p><strong>ISBN :</strong> {{ book.isbn|format_isbn }}</p>
+        <p><strong>Année :</strong> {{ book.publication_year }}</p>
+        <p><strong>Catégorie :</strong> {{ book.category|default:"Non catégorisé" }}</p>
+        <p><strong>Stock :</strong> {{ book.stock_dispo }} / {{ book.stock_max }}</p>
+        <p><strong>Description :</strong> {{ book.description|truncatewords:50 }}</p>
+        <p><strong>Langue :</strong> {{ book.language }}</p>
+        <p><strong>Pages :</strong> {{ book.nb_pages }}</p>
+        <p><strong>Édition :</strong> {{ book.edition }}</p>
+        <p><strong>Date ajout :</strong> {{ book.catalogued_date|date:"d/m/Y" }}</p>
+        {% if available %}
+        <a href="{% url 'library:loan_create' book_id=book.pk %}" class="btn btn-success">Emprunter</a>
+        {% else %}
+        <button class="btn btn-secondary" disabled>Indisponible</button>
+        {% endif %}
+    </div>
+</div>
+<a href="{% url 'library:book_list' %}" class="btn btn-secondary mt-3">Retour à la liste</a>
+{% endblock %}

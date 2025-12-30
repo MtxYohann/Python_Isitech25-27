@@ -1,3 +1,31 @@
-<h1>{{ author.first_name }} {{ author.last_name }}</h1>
-<p>Date de naissance : {{ author.birth_date }}</p>
-<p>Biographie : {{ author.biography }}</p>
+{% extends 'library/base.html' %}
+{% load library_tags %}
+{% block title %}{{ author.first_name }} {{ author.last_name }}{% endblock %}
+{% block content %}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'library:author_list' %}">Auteurs</a></li>
+        <li class="breadcrumb-item active">{{ author.first_name }} {{ author.last_name }}</li>
+    </ol>
+</nav>
+<div class="row">
+    <div class="col-md-8">
+        <h1>{{ author.first_name }} {{ author.last_name }}</h1>
+        <p><strong>Nationalité :</strong> {{ author.nationality|default:"Non spécifiée" }}</p>
+        <p><strong>Date de naissance :</strong> {{ author.birth_date|date:"d/m/Y" }}</p>
+        <p><strong>Date de décès :</strong> {{ author.date_of_death|date:"d/m/Y"|default:"-" }}</p>
+        <p><strong>Biographie :</strong> {{ author.biography }}</p>
+        <h2 class="mt-4">Livres de cet auteur</h2>
+        <div class="row">
+            {% for book in author.books.all %}
+            <div class="col-md-6 mb-3">
+                {% book_card book %}
+            </div>
+            {% empty %}
+            <div class="alert alert-warning">Aucun livre associé.</div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+<a href="{% url 'library:author_list' %}" class="btn btn-secondary">Retour à la liste</a>
+{% endblock %}

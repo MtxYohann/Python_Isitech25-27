@@ -1,0 +1,38 @@
+{% extends 'library/base.html' %}
+{% load library_tags %}
+{% block title %}Historique des Emprunts{% endblock %}
+{% block content %}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item active">Historique des Emprunts</li>
+    </ol>
+</nav>
+<h1 class="mb-4">Historique des Emprunts</h1>
+<form method="get" class="mb-4">
+    <div class="input-group">
+        <input type="email" name="email" class="form-control" placeholder="Votre email" value="{{ email }}" required>
+        <button class="btn btn-outline-primary" type="submit">Voir l'historique</button>
+    </div>
+</form>
+{% if loans %}
+<h2>Vos emprunts</h2>
+<div class="row">
+    {% for loan in loans %}
+    <div class="col-md-6 mb-3">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">{{ loan.book.title }}</h5>
+                <p class="card-text">Date d'emprunt: {{ loan.borrow_date }}</p>
+                <p class="card-text">Retour: {{ loan.return_date|default:"Non retourné" }}</p>
+                <p class="card-text">{% loan_status_badge loan %}</p>
+                <p class="card-text">Pénalité: {% calculate_penalty_tag loan %} €</p>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% elif email %}
+<div class="alert alert-warning">Aucun emprunt trouvé pour "{{ email }}".</div>
+{% endif %}
+<a href="{% url 'library:book_list' %}" class="btn btn-secondary">Retour à la liste des livres</a>
+{% endblock %}

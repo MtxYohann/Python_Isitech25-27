@@ -1,0 +1,34 @@
+{% extends 'library/base.html' %}
+{% load library_tags %}
+{% block title %}Emprunts en Retard{% endblock %}
+{% block content %}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item active">Emprunts en Retard</li>
+    </ol>
+</nav>
+<h1 class="mb-4">Emprunts en Retard</h1>
+{% if loans %}
+<div class="row">
+    {% for loan in loans %}
+    <div class="col-md-6 mb-3">
+        <div class="card border-danger">
+            <div class="card-body">
+                <h5 class="card-title">{{ loan.book.title }}</h5>
+                <p class="card-text">Emprunteur: {{ loan.borrower_full_name }} ({{ loan.borrower_email }})</p>
+                <p class="card-text">Date d'emprunt: {{ loan.borrow_date }}</p>
+                <p class="card-text">Échéance: {{ loan.due_date }}</p>
+                <p class="card-text">Jours de retard: {{ loan|overdue_days }}</p>
+                <p class="card-text">Pénalité: {% calculate_penalty_tag loan %} €</p>
+                {% loan_status_badge loan %}
+                <br><a href="{% url 'library:loan_return' loan_id=loan.pk %}" class="btn btn-warning mt-2">Retourner</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="alert alert-success">Aucun emprunt en retard.</div>
+{% endif %}
+<a href="{% url 'library:book_list' %}" class="btn btn-secondary">Retour à la liste des livres</a>
+{% endblock %}

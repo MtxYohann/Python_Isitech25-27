@@ -1,0 +1,32 @@
+{% extends 'library/base.html' %}
+{% load library_tags %}
+{% block title %}Emprunts Actifs{% endblock %}
+{% block content %}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item active">Emprunts Actifs</li>
+    </ol>
+</nav>
+<h1 class="mb-4">Emprunts Actifs</h1>
+{% if loans %}
+<div class="row">
+    {% for loan in loans %}
+    <div class="col-md-6 mb-3">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">{{ loan.book.title }}</h5>
+                <p class="card-text">Emprunteur: {{ loan.borrower_full_name }} ({{ loan.borrower_email }})</p>
+                <p class="card-text">Date d'emprunt: {{ loan.borrow_date }}</p>
+                <p class="card-text">Échéance: {{ loan.due_date }}</p>
+                {% loan_status_badge loan %}
+                <br><a href="{% url 'library:loan_return' loan_id=loan.pk %}" class="btn btn-warning mt-2">Retourner</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="alert alert-info">Aucun emprunt actif.</div>
+{% endif %}
+<a href="{% url 'library:book_list' %}" class="btn btn-secondary">Retour à la liste des livres</a>
+{% endblock %}

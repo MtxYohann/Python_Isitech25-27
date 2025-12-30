@@ -1,6 +1,27 @@
-<h1>Liste des Autheurs</h1>
-<ul>
+{% extends 'library/base.html' %}
+{% load library_tags %}
+{% block title %}Liste des Auteurs{% endblock %}
+{% block content %}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item active">Auteurs</li>
+    </ol>
+</nav>
+<h1 class="mb-4">Liste des Auteurs</h1>
+<a href="{% url 'library:author_search' %}" class="btn btn-primary mb-3">Rechercher des auteurs</a>
+<div class="row">
     {% for author in authors %}
-    <li><a href="{% url 'author_detail' author.pk %}">{{ author.first_name }} {{ author.last_name }}</a></li>
+    <div class="col-md-4 mb-3">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title"><a href="{% url 'library:author_detail' pk=author.pk %}">{{ author.first_name }}
+                        {{ author.last_name }}</a></h5>
+                <p class="card-text">Nationalité : {{ author.nationality|default:"Non spécifiée" }}</p>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="alert alert-info">Aucun auteur trouvé.</div>
     {% endfor %}
-</ul>
+</div>
+{% endblock %}
