@@ -1,6 +1,7 @@
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.core.exceptions import ValidationError
+from django.utils import timezone
 import datetime
 
 # Create your models here.
@@ -66,8 +67,10 @@ class Loan(models.Model):
     librarian_comments = models.TextField(blank=True)
 
     def save(self, *args, **kwargs):
+        if not self.borrow_date:
+            self.borrow_date = timezone.now()  # Définit si None
         if not self.due_date:
-            self.due_date = self.borrow_date.date() + datetime.timedelta(days=14)  
+            self.due_date = self.borrow_date.date() + datetime.timedelta(days=14)
         super().save(*args, **kwargs)
 
     def is_overdue(self):

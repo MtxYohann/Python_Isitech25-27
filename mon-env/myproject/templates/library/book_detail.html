@@ -1,0 +1,15 @@
+<h1>{{ book.title }}</h1>
+<p><strong>Auteur :</strong> {{ book.author }}</p>
+<p><strong>ISBN :</strong> {{ book.isbn }}</p>
+<p><strong>Année de publication :</strong> {{ book.publication_year }}</p>
+<p><strong>Catégorie :</strong> {{ book.category }}</p>
+<p><strong>Exemplaires disponibles :</strong> {{ book.stock_dispo }} / {{ book.stock_max }}</p>
+<p><strong>Description :</strong> {{ book.description }}</p>
+<p><strong>Langue :</strong> {{ book.language }}</p>
+<p><strong>Nombre de pages :</strong> {{ book.nb_pages }}</p>
+<p><strong>Édition :</strong> {{ book.edition }}</p>
+<p><strong>Image :</strong> <img src="{{ book.image_url }}" alt="{{ book.title }}" style="max-width: 200px;"></p>
+<p><strong>Date d'ajout au catalogue :</strong> {{ book.catalogued_date }}</p>
+
+<a href="{% url 'loan_create' book.pk %}">Emprunter ce livre</a>
+<a href="{% url 'book_list' %}">Retour à la liste</a>
